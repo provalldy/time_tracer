@@ -4,7 +4,7 @@
   var Promise = window.TrelloPowerUp.Promise;
   var STORAGE_KEY = "listStageTimers";
   var BASE_URL = new URL(".", window.location.href).href;
-  var FRONT_BADGE_ICON = BASE_URL + "badge-icon-16.png?v=20260311-001";
+  var FRONT_BADGE_ICON = BASE_URL + "badge-icon.svg?v=20260311-003";
 
   function toPadded(num) {
     return String(num).padStart(2, "0");
