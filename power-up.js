@@ -5,6 +5,10 @@
   var STORAGE_KEY = "listStageTimers";
   var BASE_URL = new URL(".", window.location.href).href;
   var FRONT_BADGE_ICON = BASE_URL + "badge-icon.svg?v=20260311-002";
+  var FRONT_BADGE_ICON_OBJECT = {
+    url: FRONT_BADGE_ICON,
+    monochrome: false,
+  };
 
   function toPadded(num) {
     return String(num).padStart(2, "0");
@@ -198,7 +202,7 @@
           refresh: 10,
         };
         if (includeFrontIcon) {
-          dynamicBadge.icon = FRONT_BADGE_ICON;
+          dynamicBadge.icon = FRONT_BADGE_ICON_OBJECT;
         }
         return {
           dynamic: function () {
@@ -212,7 +216,7 @@
         color: "light-gray",
       };
       if (includeFrontIcon) {
-        staticBadge.icon = FRONT_BADGE_ICON;
+        staticBadge.icon = FRONT_BADGE_ICON_OBJECT;
       }
       return staticBadge;
     });
@@ -265,7 +269,7 @@
           title: "Power-Up error: " + msg.slice(0, 120),
         };
         if (includeFrontIcon) {
-          errBadge.icon = FRONT_BADGE_ICON;
+          errBadge.icon = FRONT_BADGE_ICON_OBJECT;
         }
         return [errBadge];
       });
