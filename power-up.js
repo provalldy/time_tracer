@@ -4,11 +4,7 @@
   var Promise = window.TrelloPowerUp.Promise;
   var STORAGE_KEY = "listStageTimers";
   var BASE_URL = new URL(".", window.location.href).href;
-  var FRONT_BADGE_ICON = BASE_URL + "badge-icon.svg?v=20260311-002";
-  var FRONT_BADGE_ICON_OBJECT = {
-    url: FRONT_BADGE_ICON,
-    monochrome: false,
-  };
+  var FRONT_BADGE_ICON = BASE_URL + "badge-icon-16.png?v=20260311-001";
 
   function toPadded(num) {
     return String(num).padStart(2, "0");
@@ -193,7 +189,7 @@
     return summaries.map(function (item) {
       if (item.activeStartedAt !== null) {
         var closedMs = item.totalMs - (now - item.activeStartedAt);
-        var dynamicBadge = {
+        var activeBadge = {
           text: formatBadgeText(
             item.listName,
             closedMs + Math.max(0, Date.now() - item.activeStartedAt)
@@ -202,13 +198,9 @@
           refresh: 10,
         };
         if (includeFrontIcon) {
-          dynamicBadge.icon = FRONT_BADGE_ICON_OBJECT;
+          activeBadge.icon = FRONT_BADGE_ICON;
         }
-        return {
-          dynamic: function () {
-            return dynamicBadge;
-          },
-        };
+        return activeBadge;
       }
 
       var staticBadge = {
@@ -216,7 +208,7 @@
         color: "light-gray",
       };
       if (includeFrontIcon) {
-        staticBadge.icon = FRONT_BADGE_ICON_OBJECT;
+        staticBadge.icon = FRONT_BADGE_ICON;
       }
       return staticBadge;
     });
@@ -269,7 +261,7 @@
           title: "Power-Up error: " + msg.slice(0, 120),
         };
         if (includeFrontIcon) {
-          errBadge.icon = FRONT_BADGE_ICON_OBJECT;
+          errBadge.icon = FRONT_BADGE_ICON;
         }
         return [errBadge];
       });
