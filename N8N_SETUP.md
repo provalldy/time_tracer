@@ -150,6 +150,32 @@ pulledAt
 - Matching column:
   - `rowKey`
 
+`Column to match on`:
+
+```text
+rowKey
+```
+
+각 컬럼 표현식:
+
+```text
+rowKey -> {{$json.rowKey}}
+cardId -> {{$json.cardId}}
+cardName -> {{$json.cardName}}
+cardUrl -> {{$json.cardUrl}}
+cardClosed -> {{$json.cardClosed}}
+currentListId -> {{$json.currentListId}}
+stageNumber -> {{$json.stageNumber}}
+stageListId -> {{$json.stageListId}}
+stageListName -> {{$json.stageListName}}
+startedAt -> {{$json.startedAt}}
+endedAt -> {{$json.endedAt}}
+durationLabel -> {{$json.durationLabel}}
+movedByName -> {{$json.movedByName}}
+movedByUsername -> {{$json.movedByUsername}}
+pulledAt -> {{$json.pulledAt}}
+```
+
 ## Notes
 
 - `durationLabel`은 저장된 원시 timestamp에서 n8n이 계산합니다.
