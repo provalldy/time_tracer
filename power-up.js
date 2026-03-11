@@ -337,7 +337,7 @@
         data.cards[card.id] = {
           cardId: card.id,
           cardName: card.name || "(Untitled Card)",
-          cardUrl: card.shortUrl || "",
+          cardUrl: card.url || "",
           lastUpdatedAt: now,
           stages: state.stages.map(function (stage) {
             return {
@@ -358,7 +358,7 @@
             movedAt: transition.movedAt,
             cardId: card.id,
             cardName: card.name || "(Untitled Card)",
-            cardUrl: card.shortUrl || "",
+            cardUrl: card.url || "",
             fromListId: transition.fromListId,
             fromListName: transition.fromListName,
             toListId: transition.toListId,
@@ -530,7 +530,7 @@
     var includeFrontIcon = surface === "front";
 
     return Promise.all([
-      t.card("id", "idList", "name", "shortUrl"),
+      t.card("id", "idList", "name", "url"),
       t.list("id", "name"),
       t.get("card", "shared", STORAGE_KEY),
       getBoardSettings(t),
