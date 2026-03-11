@@ -32,6 +32,7 @@ Apps Script에서 `Project Settings -> Script properties` 에 아래 값 추가:
 
 - `SPREADSHEET_ID`
   - 기록할 Google Spreadsheet ID
+  - 전체 Google Sheet URL을 넣어도 자동으로 ID를 추출함
 - `WEBHOOK_SECRET`
   - 긴 랜덤 문자열
 - `WEBHOOK_CALLBACK_URL`
@@ -52,6 +53,11 @@ Apps Script에서 `Project Settings -> Script properties` 에 아래 값 추가:
 ## 4. 초기 시트 생성
 
 Apps Script 에디터에서 `setupSheets()` 한 번 실행
+
+정상 실행되면 아래 정보를 반환:
+- `spreadsheetId`
+- `spreadsheetUrl`
+- 생성/확인된 시트 이름 3개
 
 ## 5. Trello webhook 등록
 

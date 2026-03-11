@@ -59,7 +59,18 @@ function doPost(e) {
 }
 
 function setupSheets() {
-  ensureSheets_(getSpreadsheet_());
+  var spreadsheet = getSpreadsheet_();
+  var sheets = ensureSheets_(spreadsheet);
+  return {
+    ok: true,
+    spreadsheetId: spreadsheet.getId(),
+    spreadsheetUrl: spreadsheet.getUrl(),
+    sheets: [
+      sheets.current.getName(),
+      sheets.history.getName(),
+      sheets.processed.getName(),
+    ],
+  };
 }
 
 function resetSheets() {
@@ -494,15 +505,27 @@ function parsePayload_(e) {
 }
 
 function getSpreadsheet_() {
-  var spreadsheetId = getConfig_().SPREADSHEET_ID;
-  if (!spreadsheetId) {
+  var spreadsheetIdOrUrl = getConfig_().SPREADSHEET_ID;
+  if (!spreadsheetIdOrUrl) {
+    var active = SpreadsheetApp.getActiveSpreadsheet();
+    if (active) return active;
     throw new Error("Missing SPREADSHEET_ID script property.");
   }
-  return SpreadsheetApp.openById(spreadsheetId);
+
+  return SpreadsheetApp.openById(extractSpreadsheetId_(spreadsheetIdOrUrl));
 }
 
 function getConfig_() {
   return PropertiesService.getScriptProperties().getProperties();
+}
+
+function extractSpreadsheetId_(value) {
+  var raw = String(value || "").trim();
+  var match = raw.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+  if (match) {
+    return match[1];
+  }
+  return raw;
 }
 
 function normalizeActor_(memberCreator) {
