@@ -59,6 +59,12 @@ Apps Script 에디터에서 `setupSheets()` 한 번 실행
 - `spreadsheetUrl`
 - 생성/확인된 시트 이름 3개
 
+문제가 있으면 `debugSetup()` 실행:
+- Script Properties 읽기
+- 실제 열리는 스프레드시트 ID/URL
+- 생성 대상 시트 이름
+- 로그 출력
+
 ## 5. Trello webhook 등록
 
 이 저장소의 [register-trello-webhook.sh](/Users/daeyeon/Desktop/trello_power_up/scripts/register-trello-webhook.sh) 사용:

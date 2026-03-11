@@ -61,6 +61,12 @@ function doPost(e) {
 function setupSheets() {
   var spreadsheet = getSpreadsheet_();
   var sheets = ensureSheets_(spreadsheet);
+  Logger.log("setupSheets: spreadsheetId=%s", spreadsheet.getId());
+  Logger.log("setupSheets: spreadsheetUrl=%s", spreadsheet.getUrl());
+  Logger.log(
+    "setupSheets: sheets=%s",
+    [sheets.current.getName(), sheets.history.getName(), sheets.processed.getName()].join(", ")
+  );
   return {
     ok: true,
     spreadsheetId: spreadsheet.getId(),
@@ -85,13 +91,42 @@ function getWebhookInfo() {
   var props = getConfig_();
   var callbackUrl = props.WEBHOOK_CALLBACK_URL;
   var secret = props.WEBHOOK_SECRET;
-
-  return {
+  var info = {
     callbackUrl: callbackUrl,
     callbackUrlWithSecret: callbackUrl + "?secret=" + encodeURIComponent(secret),
     boardId: props.TRELLO_BOARD_ID || "",
     spreadsheetId: props.SPREADSHEET_ID || "",
   };
+  Logger.log("getWebhookInfo: %s", JSON.stringify(info));
+
+  return info;
+}
+
+function debugSetup() {
+  try {
+    var props = getConfig_();
+    var spreadsheet = getSpreadsheet_();
+    var sheets = ensureSheets_(spreadsheet);
+    var result = {
+      ok: true,
+      rawSpreadsheetProperty: props.SPREADSHEET_ID || "",
+      extractedSpreadsheetId: spreadsheet.getId(),
+      spreadsheetUrl: spreadsheet.getUrl(),
+      boardId: props.TRELLO_BOARD_ID || "",
+      webhookCallbackUrl: props.WEBHOOK_CALLBACK_URL || "",
+      hasWebhookSecret: !!props.WEBHOOK_SECRET,
+      sheets: [
+        sheets.current.getName(),
+        sheets.history.getName(),
+        sheets.processed.getName(),
+      ],
+    };
+    Logger.log("debugSetup: %s", JSON.stringify(result));
+    return result;
+  } catch (err) {
+    Logger.log("debugSetup error: %s", err && err.stack ? err.stack : String(err));
+    throw err;
+  }
 }
 
 function processAction_(payload, sheets) {
