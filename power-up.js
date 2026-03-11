@@ -270,6 +270,12 @@
   function toBadges(state, now, includeFrontIcon) {
     var summaries = applyFallbackListOrder(summarizePerList(state, now));
 
+    if (includeFrontIcon) {
+      summaries = summaries.filter(function (item) {
+        return item.activeStartedAt !== null;
+      });
+    }
+
     return summaries.map(function (item) {
       if (item.activeStartedAt !== null) {
         var closedMs = item.totalMs - (now - item.activeStartedAt);
