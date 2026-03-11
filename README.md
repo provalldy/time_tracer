@@ -66,3 +66,7 @@ GitHub Pages Power-Up과 별도로 Google Apps Script 웹앱을 붙이면 Trello
 - webhook 등록 스크립트: [scripts/register-trello-webhook.sh](/Users/daeyeon/Desktop/trello_power_up/scripts/register-trello-webhook.sh)
 - webhook 목록 조회: [scripts/list-trello-webhooks.sh](/Users/daeyeon/Desktop/trello_power_up/scripts/list-trello-webhooks.sh)
 - Apps Script 수동 테스트: [scripts/test-apps-script-webhook.sh](/Users/daeyeon/Desktop/trello_power_up/scripts/test-apps-script-webhook.sh)
+
+## n8n 적재
+
+- n8n 설정 문서: [N8N_SETUP.md](/Users/daeyeon/Desktop/trello_power_up/N8N_SETUP.md)
