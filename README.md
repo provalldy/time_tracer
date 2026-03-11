@@ -23,6 +23,8 @@
 ## 파일
 - `index.html`: Power-Up 진입 파일
 - `power-up.js`: 리스트 단계별 타이머 로직
+- `google-apps-script/`: Google Sheet 자동 적재용 Apps Script
+- `scripts/register-trello-webhook.sh`: Trello webhook 등록 스크립트
 
 ## 로컬 실행
 ```bash
@@ -52,3 +54,11 @@ ngrok http 8080
 4. 카드를 `2번 리스트`로 이동
 5. 이전 리스트 시간 고정 + 새 리스트 타이머 증가 확인
 6. 보드 상단 버튼 `타임 추적 CSV 내보내기` 클릭 후 CSV 다운로드 확인
+
+## Google Sheet 자동 적재
+
+GitHub Pages Power-Up과 별도로 Google Apps Script 웹앱을 붙이면 Trello webhook 이벤트를 Google Sheet에 자동 적재할 수 있습니다.
+
+- 설정 문서: [google-apps-script/README.md](/Users/daeyeon/Desktop/trello_power_up/google-apps-script/README.md)
+- Apps Script 코드: [google-apps-script/Code.gs](/Users/daeyeon/Desktop/trello_power_up/google-apps-script/Code.gs)
+- webhook 등록 스크립트: [scripts/register-trello-webhook.sh](/Users/daeyeon/Desktop/trello_power_up/scripts/register-trello-webhook.sh)
