@@ -24,7 +24,7 @@
     var days = Math.floor(totalMinutes / (24 * 60));
     var hours = Math.floor((totalMinutes % (24 * 60)) / 60);
     var minutes = totalMinutes % 60;
-    return days + ":" + toPadded(hours) + ":" + toPadded(minutes);
+    return days + "d " + toPadded(hours) + "h " + toPadded(minutes) + "m";
   }
 
   function formatDateTime(ms) {
@@ -422,7 +422,7 @@
         "List Name",
         "Started At (UTC)",
         "Ended At (UTC)",
-        "Duration (D:HH:MM)",
+        "Duration (Xd XXh XXm)",
         "Moved By",
         "Moved By Username",
       ],
