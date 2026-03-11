@@ -5,13 +5,30 @@
 권장 흐름:
 
 1. `Schedule Trigger`
-2. `HTTP Request`
-3. `Code`
-4. `Google Sheets`
+2. `HTTP Request (Get Lists)`
+3. `HTTP Request (Get Cards)`
+4. `Code`
+5. `Google Sheets`
 
-## HTTP Request
+## HTTP Request: Get Lists
 
-`HTTP Request` 노드에서 Trello 카드 목록과 `pluginData`를 가져옵니다.
+먼저 보드의 리스트 마스터를 가져옵니다.
+
+- Method: `GET`
+- URL: `https://api.trello.com/1/boards/YOUR_BOARD_ID/lists`
+
+Query Parameters:
+
+- `fields` = `id,name,pos,closed`
+- `filter` = `all`
+- `key` = `YOUR_TRELLO_KEY`
+- `token` = `YOUR_TRELLO_TOKEN`
+
+노드 이름은 `Get Lists`로 두는 편이 좋습니다.
+
+## HTTP Request: Get Cards
+
+다음으로 카드 목록과 `pluginData`를 가져옵니다.
 
 - Method: `GET`
 - URL: `https://api.trello.com/1/boards/YOUR_BOARD_ID/cards`
@@ -23,6 +40,8 @@ Query Parameters:
 - `filter` = `all`
 - `key` = `YOUR_TRELLO_KEY`
 - `token` = `YOUR_TRELLO_TOKEN`
+
+노드 이름은 `Get Cards`로 두는 편이 좋습니다.
 
 ## Code Node
 
@@ -70,7 +89,43 @@ function extractCards(items) {
   return [];
 }
 
+function extractLists(items) {
+  if (!items.length) return [];
+
+  if (items[0].json && items[0].json.id && items[0].json.name) {
+    return items.map(item => item.json);
+  }
+
+  if (Array.isArray(items[0].json)) {
+    return items[0].json;
+  }
+
+  if (Array.isArray(items[0].json.body)) {
+    return items[0].json.body;
+  }
+  if (Array.isArray(items[0].json.data)) {
+    return items[0].json.data;
+  }
+
+  return [];
+}
+
 const cards = extractCards($input.all());
+const lists = extractLists($("Get Lists").all());
+const sortedLists = [...lists].sort((a, b) => Number(a.pos || 0) - Number(b.pos || 0));
+const listMap = new Map(
+  sortedLists.map(list => [
+    list.id,
+    {
+      id: list.id || "",
+      name: list.name || "",
+      pos: Number(list.pos || 0),
+      closed: !!list.closed,
+    },
+  ])
+);
+const boardListNames = sortedLists.map(list => list.name || "").join(" | ");
+const boardListIds = sortedLists.map(list => list.id || "").join(" | ");
 const out = [];
 
 for (const card of cards) {
@@ -92,6 +147,8 @@ for (const card of cards) {
 
   if (!timerState || !Array.isArray(timerState.stages)) continue;
 
+  const currentList = listMap.get(card.idList) || null;
+
   for (let i = 0; i < timerState.stages.length; i++) {
     const stage = timerState.stages[i];
 
@@ -103,6 +160,8 @@ for (const card of cards) {
         cardUrl: card.url || "",
         cardClosed: !!card.closed,
         currentListId: card.idList || "",
+        currentListName: currentList ? currentList.name : "",
+        currentListPos: currentList ? currentList.pos : "",
         stageNumber: i + 1,
         stageListId: stage.listId || "",
         stageListName: stage.listName || "",
@@ -111,6 +170,8 @@ for (const card of cards) {
         durationLabel: formatDuration(stage.startedAt, stage.endedAt),
         movedByName: stage.movedByName || "",
         movedByUsername: stage.movedByUsername || "",
+        boardListNames,
+        boardListIds,
         pulledAt: new Date().toISOString(),
       },
     });
@@ -131,6 +192,8 @@ cardName
 cardUrl
 cardClosed
 currentListId
+currentListName
+currentListPos
 stageNumber
 stageListId
 stageListName
@@ -139,6 +202,8 @@ endedAt
 durationLabel
 movedByName
 movedByUsername
+boardListNames
+boardListIds
 pulledAt
 ```
 
@@ -165,6 +230,8 @@ cardName -> {{$json.cardName}}
 cardUrl -> {{$json.cardUrl}}
 cardClosed -> {{$json.cardClosed}}
 currentListId -> {{$json.currentListId}}
+currentListName -> {{$json.currentListName}}
+currentListPos -> {{$json.currentListPos}}
 stageNumber -> {{$json.stageNumber}}
 stageListId -> {{$json.stageListId}}
 stageListName -> {{$json.stageListName}}
@@ -173,6 +240,8 @@ endedAt -> {{$json.endedAt}}
 durationLabel -> {{$json.durationLabel}}
 movedByName -> {{$json.movedByName}}
 movedByUsername -> {{$json.movedByUsername}}
+boardListNames -> {{$json.boardListNames}}
+boardListIds -> {{$json.boardListIds}}
 pulledAt -> {{$json.pulledAt}}
 ```
 
@@ -181,3 +250,5 @@ pulledAt -> {{$json.pulledAt}}
 - `durationLabel`은 저장된 원시 timestamp에서 n8n이 계산합니다.
 - 이 방식은 `pluginData`에 이미 저장된 값만 읽습니다.
 - 즉 카드가 한 번도 렌더되지 않았거나 Power-Up이 아직 값을 저장하지 않은 상태라면 n8n도 읽을 수 없습니다.
+- `currentListName`은 현재 카드가 실제로 들어가 있는 리스트 이름입니다.
+- `boardListNames`는 보드에 있는 모든 리스트 이름을 `|`로 이어붙인 문자열입니다.
