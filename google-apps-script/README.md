@@ -65,6 +65,11 @@ Apps Script 에디터에서 `setupSheets()` 한 번 실행
 - 생성 대상 시트 이름
 - 로그 출력
 
+그래도 시트가 안 보이면 `debugWriteProbe()` 실행:
+- `DebugProbe` 시트를 강제로 생성
+- 현재 시각과 스프레드시트 ID/URL을 셀에 직접 기록
+- 이 함수가 성공하면 Apps Script의 시트 쓰기 권한과 대상 스프레드시트는 정상
+
 ## 5. Trello webhook 등록
 
 이 저장소의 [register-trello-webhook.sh](/Users/daeyeon/Desktop/trello_power_up/scripts/register-trello-webhook.sh) 사용:

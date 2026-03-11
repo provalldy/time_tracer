@@ -2,6 +2,7 @@ var SHEET_NAMES = {
   current: "CurrentStages",
   history: "StageHistory",
   processed: "ProcessedActions",
+  debug: "DebugProbe",
 };
 
 function doGet() {
@@ -125,6 +126,41 @@ function debugSetup() {
     return result;
   } catch (err) {
     Logger.log("debugSetup error: %s", err && err.stack ? err.stack : String(err));
+    throw err;
+  }
+}
+
+function debugWriteProbe() {
+  try {
+    var spreadsheet = getSpreadsheet_();
+    var debugSheet = spreadsheet.getSheetByName(SHEET_NAMES.debug);
+    if (!debugSheet) {
+      debugSheet = spreadsheet.insertSheet(SHEET_NAMES.debug);
+    }
+
+    var timestamp = new Date().toISOString();
+    debugSheet.getRange(1, 1, 1, 4).setValues([
+      ["Last Probe At", "Spreadsheet ID", "Spreadsheet URL", "Note"],
+    ]);
+    debugSheet.getRange(2, 1, 1, 4).setValues([
+      [timestamp, spreadsheet.getId(), spreadsheet.getUrl(), "Apps Script write probe"],
+    ]);
+    debugSheet.setFrozenRows(1);
+
+    var result = {
+      ok: true,
+      spreadsheetId: spreadsheet.getId(),
+      spreadsheetUrl: spreadsheet.getUrl(),
+      debugSheetName: debugSheet.getName(),
+      wroteAt: timestamp,
+    };
+    Logger.log("debugWriteProbe: %s", JSON.stringify(result));
+    return result;
+  } catch (err) {
+    Logger.log(
+      "debugWriteProbe error: %s",
+      err && err.stack ? err.stack : String(err)
+    );
     throw err;
   }
 }
@@ -445,6 +481,12 @@ function ensureSheets_(spreadsheet) {
     "Action Type",
     "Action Date",
     "Processed At",
+  ]);
+  getOrCreateSheet_(spreadsheet, SHEET_NAMES.debug, [
+    "Last Probe At",
+    "Spreadsheet ID",
+    "Spreadsheet URL",
+    "Note",
   ]);
 
   return {
