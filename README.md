@@ -25,6 +25,8 @@
 - `power-up.js`: 리스트 단계별 타이머 로직
 - `google-apps-script/`: Google Sheet 자동 적재용 Apps Script
 - `scripts/register-trello-webhook.sh`: Trello webhook 등록 스크립트
+- `scripts/list-trello-webhooks.sh`: 등록된 Trello webhook 목록 조회
+- `scripts/test-apps-script-webhook.sh`: Apps Script webhook 수동 POST 테스트
 
 ## 로컬 실행
 ```bash
@@ -62,3 +64,5 @@ GitHub Pages Power-Up과 별도로 Google Apps Script 웹앱을 붙이면 Trello
 - 설정 문서: [google-apps-script/README.md](/Users/daeyeon/Desktop/trello_power_up/google-apps-script/README.md)
 - Apps Script 코드: [google-apps-script/Code.gs](/Users/daeyeon/Desktop/trello_power_up/google-apps-script/Code.gs)
 - webhook 등록 스크립트: [scripts/register-trello-webhook.sh](/Users/daeyeon/Desktop/trello_power_up/scripts/register-trello-webhook.sh)
+- webhook 목록 조회: [scripts/list-trello-webhooks.sh](/Users/daeyeon/Desktop/trello_power_up/scripts/list-trello-webhooks.sh)
+- Apps Script 수동 테스트: [scripts/test-apps-script-webhook.sh](/Users/daeyeon/Desktop/trello_power_up/scripts/test-apps-script-webhook.sh)
